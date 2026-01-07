@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>400道题目刷题网站</title>
+    <style>
+        :root {
+            --primary-color: #4a6baf;
+            --secondary-color: #6c8bd8;
+            --background-color: #f5f7fa;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --correct-color: #4caf50;
+            --incorrect-color: #f44336;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .question-container {
+            flex: 3;
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .question-number {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            background-color: #f0f4ff;
+            border-color: var(--secondary-color);
+        }
+        
+        .option.selected {
+            background-color: #e3eeff;
+            border-color: var(--primary-color);
+        }
+        
+        .option.correct {
+            background-color: rgba(76, 175, 80, 0.1);
+            border-color: var(--correct-color);
+        }
+        
+        .option.incorrect {
+            background-color: rgba(244, 67, 54, 0.1);
+            border-color: var(--incorrect-color);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .sidebar {
+            flex: 1;
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .progress-container {
+            margin-bottom: 30px;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .question-list {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .question-item {
+            width: 100%;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .question-item:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .question-item.current {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .question-item.answered {
+            background-color: var(--correct-color);
+            color: white;
+        }
+        
+        .question-item.incorrect {
+            background-color: var(--incorrect-color);
+            color: white;
+        }
+        
+        .stats {
+            margin-top: 30px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result.correct {
+            border-left: 4px solid var(--correct-color);
+        }
+        
+        .result.incorrect {
+            border-left: 4px solid var(--incorrect-color);
+        }
+        
+        .explanation {
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .question-list {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>400道题目刷题网站</h1>
+            <p class="description">提升你的知识水平，挑战400道精选题目</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="question-container">
+                <div class="question-number">题目 1 / 400</div>
+                <div class="question-text">这是第一道题目，请选择正确答案：</div>
+                
+                <div class="options">
+                    <div class="option" data-index="0">选项 A</div>
+                    <div class="option" data-index="1">选项 B</div>
+                    <div class="option" data-index="2">选项 C</div>
+                    <div class="option" data-index="3">选项 D</div>
+                </div>
+                
+                <div class="result">
+                    <div class="result-text"></div>
+                    <div class="explanation"></div>
+                </div>
+                
+                <div class="controls">
+                    <button id="prev-btn" disabled>上一题</button>
+                    <button id="check-btn">检查答案</button>
+                    <button id="next-btn">下一题</button>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>进度</span>
+                        <span id="progress-text">0/400</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress-bar"></div>
+                    </div>
+                </div>
+                
+                <h3>题目导航</h3>
+                <div class="question-list" id="question-list">
+                    <!-- 题目导航将通过JavaScript动态生成 -->
+                </div>
+                
+                <div class="stats">
+                    <h3>统计信息</h3>
+                    <div class="stat-item">
+                        <span>已答题数:</span>
+                        <span id="answered-count">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>正确数:</span>
+                        <span id="correct-count">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>正确率:</span>
+                        <span id="accuracy">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 刷题网站 | 提升知识，挑战自我</p>
+        </footer>
+    </div>
+
+    <script>
+        // 题目数据示例（实际应用中应该包含400道题目）
+        const questions = [
+            {
+                question: "这是第一道题目，请选择正确答案：",
+                options: ["选项 A", "选项 B", "选项 C", "选项 D"],
+                correctAnswer: 0,
+                explanation: "这是正确答案的解释，因为A选项是最合适的。"
+            },
+            {
+                question: "第二道题目，关于JavaScript的基础知识：",
+                options: ["变量声明使用var", "变量声明使用let", "变量声明使用const", "以上都可以"],
+                correctAnswer: 3,
+                explanation: "在JavaScript中，可以使用var、let和const来声明变量。"
+            },
+            {
+                question: "HTML中，用于创建超链接的标签是：",
+                options: ["<link>", "<a>", "<href>", "<url>"],
+                correctAnswer: 1,
+                explanation: "<a>标签用于创建超链接，href属性指定链接的目标地址。"
+            },
+            // 这里应该包含400道题目，但为了示例只添加了3道
+            // 实际使用时，您需要添加完整的400道题目
+        ];
+
+        // 初始化变量
+        let currentQuestionIndex = 0;
+        let selectedOption = null;
+        let userAnswers = new Array(questions.length).fill(null);
+        let correctAnswers = 0;
+
+        // DOM元素
+        const questionNumberElement = document.querySelector('.question-number');
+        const questionTextElement = document.querySelector('.question-text');
+        const optionsElements = document.querySelectorAll('.option');
+        const resultElement = document.querySelector('.result');
+        const resultTextElement = document.querySelector('.result-text');
+        const explanationElement = document.querySelector('.explanation');
+        const prevButton = document.getElementById('prev-btn');
+        const checkButton = document.getElementById('check-btn');
+        const nextButton = document.getElementById('next-btn');
+        const progressTextElement = document.getElementById('progress-text');
+        const progressBarElement = document.getElementById('progress-bar');
+        const questionListElement = document.getElementById('question-list');
+        const answeredCountElement = document.getElementById('answered-count');
+        const correctCountElement = document.getElementById('correct-count');
+        const accuracyElement = document.getElementById('accuracy');
+
+        // 初始化题目导航
+        function initializeQuestionList() {
+            questionListElement.innerHTML = '';
+            for (let i = 0; i < questions.length; i++) {
+                const questionItem = document.createElement('div');
+                questionItem.className = 'question-item';
+                questionItem.textContent = i + 1;
+                questionItem.dataset.index = i;
+                
+                questionItem.addEventListener('click', () => {
+                    if (currentQuestionIndex !== i) {
+                        currentQuestionIndex = i;
+                        loadQuestion();
+                    }
+                });
+                
+                questionListElement.appendChild(questionItem);
+            }
+        }
+
+        // 加载题目
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            
+            // 更新题目信息
+            questionNumberElement.textContent = `题目 ${currentQuestionIndex + 1} / ${questions.length}`;
+            questionTextElement.textContent = question.question;
+            
+            // 更新选项
+            optionsElements.forEach((option, index) => {
+                option.textContent = question.options[index];
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // 重置结果区域
+            resultElement.classList.remove('show', 'correct', 'incorrect');
+            
+            // 更新导航中的当前题目
+            updateQuestionNavigation();
+            
+            // 更新按钮状态
+            prevButton.disabled = currentQuestionIndex === 0;
+            nextButton.disabled = currentQuestionIndex === questions.length - 1;
+            
+            // 如果之前已经选择过答案
+            if (userAnswers[currentQuestionIndex] !== null) {
+                optionsElements[userAnswers[currentQuestionIndex]].classList.add('selected');
+                selectedOption = userAnswers[currentQuestionIndex];
+                checkButton.disabled = true;
+                
+                // 如果已经检查过答案，显示结果
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    showResult();
+                }
+            } else {
+                selectedOption = null;
+                checkButton.disabled = false;
+            }
+            
+            // 更新进度
+            updateProgress();
+        }
+
+        // 更新题目导航
+        function updateQuestionNavigation() {
+            const questionItems = document.querySelectorAll('.question-item');
+            questionItems.forEach((item, index) => {
+                item.classList.remove('current');
+                
+                if (index === currentQuestionIndex) {
+                    item.classList.add('current');
+                }
+                
+                if (userAnswers[index] !== null) {
+                    if (userAnswers[index] === questions[index].correctAnswer) {
+                        item.classList.add('answered');
+                    } else {
+                        item.classList.add('incorrect');
+                    }
+                }
+            });
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const answeredCount = userAnswers.filter(answer => answer !== null).length;
+            const progressPercentage = (answeredCount / questions.length) * 100;
+            
+            progressTextElement.textContent = `${answeredCount}/${questions.length}`;
+            progressBarElement.style.width = `${progressPercentage}%`;
+            
+            answeredCountElement.textContent = answeredCount;
+            correctCountElement.textContent = correctAnswers;
+            
+            const accuracy = answeredCount > 0 ? (correctAnswers / answeredCount * 100).toFixed(1) : 0;
+            accuracyElement.textContent = `${accuracy}%`;
+        }
+
+        // 显示结果
+        function showResult() {
+            const question = questions[currentQuestionIndex];
+            const isCorrect = selectedOption === question.correctAnswer;
+            
+            resultElement.classList.add('show');
+            resultElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            resultTextElement.textContent = isCorrect ? 
+                "恭喜！回答正确！" : 
+                "很遗憾，回答错误！";
+            
+            explanationElement.textContent = question.explanation;
+            
+            // 高亮显示正确答案和用户答案
+            optionsElements.forEach((option, index) => {
+                if (index === question.correctAnswer) {
+                    option.classList.add('correct');
+                } else if (index === selectedOption && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+            });
+        }
+
+        // 事件监听器
+        optionsElements.forEach(option => {
+            option.addEventListener('click', () => {
+                if (userAnswers[currentQuestionIndex] !== null) return;
+                
+                // 移除之前的选择
+                optionsElements.forEach(opt => opt.classList.remove('selected'));
+                
+                // 添加新选择
+                option.classList.add('selected');
+                selectedOption = parseInt(option.dataset.index);
+                checkButton.disabled = false;
+            });
+        });
+
+        checkButton.addEventListener('click', () => {
+            if (selectedOption === null) return;
+            
+            userAnswers[currentQuestionIndex] = selectedOption;
+            
+            // 更新正确计数
+            if (selectedOption === questions[currentQuestionIndex].correctAnswer) {
+                correctAnswers++;
+            }
+            
+            showResult();
+            updateProgress();
+            updateQuestionNavigation();
+            checkButton.disabled = true;
+        });
+
+        prevButton.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        });
+
+        // 初始化
+        initializeQuestionList();
+        loadQuestion();
+    </script>
+</body>
+</html>
