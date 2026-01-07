@@ -3,218 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>400道题目刷题网站</title>
+    <title>消防知识在线刷题系统</title>
     <style>
-        :root {
-            --primary-color: #4a6baf;
-            --secondary-color: #6c8bd8;
-            --background-color: #f5f7fa;
-            --card-color: #ffffff;
-            --text-color: #333333;
-            --correct-color: #4caf50;
-            --incorrect-color: #f44336;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Microsoft YaHei', sans-serif;
         }
         
         body {
-            background-color: var(--background-color);
-            color: var(--text-color);
+            background-color: #f5f5f5;
+            color: #333;
             line-height: 1.6;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
         }
         
         header {
-            background-color: var(--primary-color);
+            background-color: #e74c3c;
             color: white;
             padding: 20px 0;
             text-align: center;
-            border-radius: 10px;
+            border-radius: 8px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 28px;
             margin-bottom: 10px;
         }
         
-        .description {
-            font-size: 1.1rem;
+        .subtitle {
+            font-size: 16px;
             opacity: 0.9;
         }
         
-        .main-content {
+        .mode-selector {
             display: flex;
-            gap: 30px;
-            margin-bottom: 30px;
+            justify-content: center;
+            margin-bottom: 20px;
         }
         
-        .question-container {
-            flex: 3;
-            background-color: var(--card-color);
-            border-radius: 10px;
+        .mode-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .mode-btn.active {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 8px;
             padding: 25px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
         }
         
         .question-number {
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
             font-weight: bold;
+            color: #e74c3c;
         }
         
         .question-text {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            line-height: 1.7;
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.5;
         }
         
         .options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
             margin-bottom: 25px;
         }
         
         .option {
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            margin-bottom: 12px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             cursor: pointer;
             transition: all 0.2s;
         }
         
         .option:hover {
-            background-color: #f0f4ff;
-            border-color: var(--secondary-color);
+            background-color: #f9f9f9;
         }
         
         .option.selected {
-            background-color: #e3eeff;
-            border-color: var(--primary-color);
+            background-color: #e8f4fd;
+            border-color: #3498db;
         }
         
         .option.correct {
-            background-color: rgba(76, 175, 80, 0.1);
-            border-color: var(--correct-color);
+            background-color: #d4edda;
+            border-color: #28a745;
         }
         
         .option.incorrect {
-            background-color: rgba(244, 67, 54, 0.1);
-            border-color: var(--incorrect-color);
+            background-color: #f8d7da;
+            border-color: #dc3545;
         }
         
         .controls {
             display: flex;
             justify-content: space-between;
-            margin-top: 25px;
+            margin-top: 20px;
         }
         
-        button {
-            padding: 12px 25px;
-            background-color: var(--primary-color);
-            color: white;
+        .btn {
+            padding: 10px 20px;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.2s;
+            font-size: 16px;
+            transition: all 0.3s;
         }
         
-        button:hover {
-            background-color: var(--secondary-color);
-        }
-        
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        
-        .sidebar {
-            flex: 1;
-            background-color: var(--card-color);
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-        
-        .progress-container {
-            margin-bottom: 30px;
-        }
-        
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        
-        .progress {
-            height: 100%;
-            background-color: var(--primary-color);
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        .question-list {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .question-item {
-            width: 100%;
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        
-        .question-item:hover {
-            background-color: #e0e0e0;
-        }
-        
-        .question-item.current {
-            background-color: var(--primary-color);
+        .btn-primary {
+            background-color: #3498db;
             color: white;
         }
         
-        .question-item.answered {
-            background-color: var(--correct-color);
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
             color: white;
         }
         
-        .question-item.incorrect {
-            background-color: var(--incorrect-color);
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-success {
+            background-color: #28a745;
             color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
         }
         
         .stats {
-            margin-top: 30px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .stats h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
         }
         
         .stat-item {
@@ -222,49 +186,61 @@
             justify-content: space-between;
             margin-bottom: 10px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #eee;
         }
         
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            background-color: #f8f9fa;
-            display: none;
+        .progress-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
         }
         
-        .result.show {
-            display: block;
-        }
-        
-        .result.correct {
-            border-left: 4px solid var(--correct-color);
-        }
-        
-        .result.incorrect {
-            border-left: 4px solid var(--incorrect-color);
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 5px;
+            transition: width 0.5s;
         }
         
         .explanation {
-            margin-top: 10px;
-            font-style: italic;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+            display: none;
         }
         
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-            color: #666;
+        .explanation.show {
+            display: block;
+        }
+        
+        .wrong-questions {
+            margin-top: 20px;
+        }
+        
+        .wrong-question {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-radius: 4px;
+            border-left: 4px solid #ffc107;
         }
         
         @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
+            .container {
+                padding: 10px;
             }
             
-            .question-list {
-                grid-template-columns: repeat(4, 1fr);
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
             }
         }
     </style>
@@ -272,291 +248,365 @@
 <body>
     <div class="container">
         <header>
-            <h1>400道题目刷题网站</h1>
-            <p class="description">提升你的知识水平，挑战400道精选题目</p>
+            <h1>消防知识在线刷题系统</h1>
+            <div class="subtitle">400道消防相关题目，助您掌握消防知识</div>
         </header>
         
-        <div class="main-content">
-            <div class="question-container">
-                <div class="question-number">题目 1 / 400</div>
-                <div class="question-text">这是第一道题目，请选择正确答案：</div>
-                
-                <div class="options">
-                    <div class="option" data-index="0">选项 A</div>
-                    <div class="option" data-index="1">选项 B</div>
-                    <div class="option" data-index="2">选项 C</div>
-                    <div class="option" data-index="3">选项 D</div>
-                </div>
-                
-                <div class="result">
-                    <div class="result-text"></div>
-                    <div class="explanation"></div>
-                </div>
-                
-                <div class="controls">
-                    <button id="prev-btn" disabled>上一题</button>
-                    <button id="check-btn">检查答案</button>
-                    <button id="next-btn">下一题</button>
-                </div>
+        <div class="mode-selector">
+            <button class="mode-btn active" id="practiceMode">练习模式</button>
+            <button class="mode-btn" id="examMode">模拟考试</button>
+            <button class="mode-btn" id="reviewMode">错题回顾</button>
+        </div>
+        
+        <div class="quiz-container">
+            <div class="question-header">
+                <div class="question-number">题目 #<span id="currentQuestion">1</span>/<span id="totalQuestions">400</span></div>
+                <div class="question-type">题型: <span id="questionType">多选题</span></div>
             </div>
             
-            <div class="sidebar">
-                <div class="progress-container">
-                    <div class="progress-label">
-                        <span>进度</span>
-                        <span id="progress-text">0/400</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress" id="progress-bar"></div>
-                    </div>
-                </div>
-                
-                <h3>题目导航</h3>
-                <div class="question-list" id="question-list">
-                    <!-- 题目导航将通过JavaScript动态生成 -->
-                </div>
-                
-                <div class="stats">
-                    <h3>统计信息</h3>
-                    <div class="stat-item">
-                        <span>已答题数:</span>
-                        <span id="answered-count">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span>正确数:</span>
-                        <span id="correct-count">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span>正确率:</span>
-                        <span id="accuracy">0%</span>
-                    </div>
-                </div>
+            <div class="question-text" id="questionText">
+                376.疏散楼梯间应符合下列哪些规定？（  ）
+            </div>
+            
+            <div class="options" id="optionsContainer">
+                <div class="option" data-value="A">A.应能天然采光和自然通风，并宜靠外墙设置</div>
+                <div class="option" data-value="B">B.不应有疏散的凸出物或其他障碍物</div>
+                <div class="option" data-value="C">C.公共建筑的楼梯间内不应设置可燃气体管道</div>
+                <div class="option" data-value="D">D.不应设置烧水间、可燃材料储藏室、垃圾道</div>
+            </div>
+            
+            <div class="explanation" id="explanation">
+                <strong>解析：</strong> 疏散楼梯间的设计应满足安全疏散要求，以上选项均为疏散楼梯间应遵守的规定。
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-secondary" id="prevBtn">上一题</button>
+                <button class="btn btn-primary" id="submitBtn">提交答案</button>
+                <button class="btn btn-success" id="nextBtn">下一题</button>
             </div>
         </div>
         
-        <footer>
-            <p>© 2023 刷题网站 | 提升知识，挑战自我</p>
-        </footer>
+        <div class="stats">
+            <h3>答题统计</h3>
+            <div class="stat-item">
+                <span>已答题数:</span>
+                <span id="answeredCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span>正确率:</span>
+                <span id="correctRate">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <div class="wrong-questions" id="wrongQuestionsContainer" style="display: none;">
+            <h3>错题集</h3>
+            <!-- 错题将在这里动态生成 -->
+        </div>
     </div>
 
     <script>
-        // 题目数据示例（实际应用中应该包含400道题目）
+        // 示例题库数据（实际应用中应包含全部400道题）
         const questions = [
             {
-                question: "这是第一道题目，请选择正确答案：",
-                options: ["选项 A", "选项 B", "选项 C", "选项 D"],
-                correctAnswer: 0,
-                explanation: "这是正确答案的解释，因为A选项是最合适的。"
+                id: 376,
+                text: "疏散楼梯间应符合下列哪些规定？（  ）",
+                options: [
+                    "A.应能天然采光和自然通风，并宜靠外墙设置",
+                    "B.不应有疏散的凸出物或其他障碍物",
+                    "C.公共建筑的楼梯间内不应设置可燃气体管道",
+                    "D.不应设置烧水间、可燃材料储藏室、垃圾道"
+                ],
+                answer: "ABCD",
+                type: "多选题",
+                explanation: "疏散楼梯间的设计应满足安全疏散要求，以上选项均为疏散楼梯间应遵守的规定。"
             },
             {
-                question: "第二道题目，关于JavaScript的基础知识：",
-                options: ["变量声明使用var", "变量声明使用let", "变量声明使用const", "以上都可以"],
-                correctAnswer: 3,
-                explanation: "在JavaScript中，可以使用var、let和const来声明变量。"
+                id: 377,
+                text: "下列（  ） 属于一类高层建筑。",
+                options: [
+                    "A.建筑高度超过50m的商住楼",
+                    "B.建筑高度超过50m的教学楼",
+                    "C.藏书80万册的图书馆",
+                    "D.省级高层广播电视楼"
+                ],
+                answer: "ABD",
+                type: "多选题",
+                explanation: "根据《建筑设计防火规范》，一类高层建筑包括建筑高度超过50m的商住楼、教学楼以及省级高层广播电视楼。"
             },
             {
-                question: "HTML中，用于创建超链接的标签是：",
-                options: ["<link>", "<a>", "<href>", "<url>"],
-                correctAnswer: 1,
-                explanation: "<a>标签用于创建超链接，href属性指定链接的目标地址。"
+                id: 378,
+                text: "下列哪些建筑的室内消火栓系统应设置水泵接合器？（ ）",
+                options: [
+                    "A.地上6层，建筑高度20m的办公楼",
+                    "B.地上3层，建筑高度15m，建筑面积12000㎡的商业楼",
+                    "C.地下1层，埋深12m，建筑面积9000㎡的商场",
+                    "D.地上6层，建筑高度25m的医院"
+                ],
+                answer: "AD",
+                type: "多选题",
+                explanation: "根据规范，建筑高度超过24m的医院和地上6层的办公楼应设置水泵接合器。"
             },
-            // 这里应该包含400道题目，但为了示例只添加了3道
-            // 实际使用时，您需要添加完整的400道题目
+            // 这里可以继续添加更多题目...
+            {
+                id: 395,
+                text: "消防工作的基本方针为（）。",
+                options: [
+                    "A.预防为主",
+                    "B.先防后消",
+                    "C.先消后防",
+                    "D.防消结合"
+                ],
+                answer: "AD",
+                type: "多选题",
+                explanation: "消防工作的基本方针是'预防为主，防消结合'。"
+            }
         ];
 
         // 初始化变量
         let currentQuestionIndex = 0;
-        let selectedOption = null;
-        let userAnswers = new Array(questions.length).fill(null);
-        let correctAnswers = 0;
+        let userAnswers = {};
+        let wrongQuestions = [];
+        let mode = 'practice';
 
         // DOM元素
-        const questionNumberElement = document.querySelector('.question-number');
-        const questionTextElement = document.querySelector('.question-text');
-        const optionsElements = document.querySelectorAll('.option');
-        const resultElement = document.querySelector('.result');
-        const resultTextElement = document.querySelector('.result-text');
-        const explanationElement = document.querySelector('.explanation');
-        const prevButton = document.getElementById('prev-btn');
-        const checkButton = document.getElementById('check-btn');
-        const nextButton = document.getElementById('next-btn');
-        const progressTextElement = document.getElementById('progress-text');
-        const progressBarElement = document.getElementById('progress-bar');
-        const questionListElement = document.getElementById('question-list');
-        const answeredCountElement = document.getElementById('answered-count');
-        const correctCountElement = document.getElementById('correct-count');
-        const accuracyElement = document.getElementById('accuracy');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const currentQuestionSpan = document.getElementById('currentQuestion');
+        const totalQuestionsSpan = document.getElementById('totalQuestions');
+        const questionTypeSpan = document.getElementById('questionType');
+        const explanationDiv = document.getElementById('explanation');
+        const prevBtn = document.getElementById('prevBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const answeredCountSpan = document.getElementById('answeredCount');
+        const correctRateSpan = document.getElementById('correctRate');
+        const progressBar = document.getElementById('progressBar');
+        const wrongQuestionsContainer = document.getElementById('wrongQuestionsContainer');
+        const practiceModeBtn = document.getElementById('practiceMode');
+        const examModeBtn = document.getElementById('examMode');
+        const reviewModeBtn = document.getElementById('reviewMode');
 
-        // 初始化题目导航
-        function initializeQuestionList() {
-            questionListElement.innerHTML = '';
-            for (let i = 0; i < questions.length; i++) {
-                const questionItem = document.createElement('div');
-                questionItem.className = 'question-item';
-                questionItem.textContent = i + 1;
-                questionItem.dataset.index = i;
-                
-                questionItem.addEventListener('click', () => {
-                    if (currentQuestionIndex !== i) {
-                        currentQuestionIndex = i;
-                        loadQuestion();
-                    }
-                });
-                
-                questionListElement.appendChild(questionItem);
-            }
+        // 初始化
+        function init() {
+            totalQuestionsSpan.textContent = questions.length;
+            loadQuestion(currentQuestionIndex);
+            updateStats();
+            
+            // 添加事件监听器
+            prevBtn.addEventListener('click', goToPreviousQuestion);
+            nextBtn.addEventListener('click', goToNextQuestion);
+            submitBtn.addEventListener('click', submitAnswer);
+            
+            practiceModeBtn.addEventListener('click', () => switchMode('practice'));
+            examModeBtn.addEventListener('click', () => switchMode('exam'));
+            reviewModeBtn.addEventListener('click', () => switchMode('review'));
         }
 
         // 加载题目
-        function loadQuestion() {
-            const question = questions[currentQuestionIndex];
+        function loadQuestion(index) {
+            const question = questions[index];
             
-            // 更新题目信息
-            questionNumberElement.textContent = `题目 ${currentQuestionIndex + 1} / ${questions.length}`;
-            questionTextElement.textContent = question.question;
+            questionText.textContent = `${question.id}.${question.text}`;
+            questionTypeSpan.textContent = question.type;
+            currentQuestionSpan.textContent = index + 1;
             
-            // 更新选项
-            optionsElements.forEach((option, index) => {
-                option.textContent = question.options[index];
-                option.classList.remove('selected', 'correct', 'incorrect');
-            });
+            // 清空选项容器
+            optionsContainer.innerHTML = '';
             
-            // 重置结果区域
-            resultElement.classList.remove('show', 'correct', 'incorrect');
-            
-            // 更新导航中的当前题目
-            updateQuestionNavigation();
-            
-            // 更新按钮状态
-            prevButton.disabled = currentQuestionIndex === 0;
-            nextButton.disabled = currentQuestionIndex === questions.length - 1;
-            
-            // 如果之前已经选择过答案
-            if (userAnswers[currentQuestionIndex] !== null) {
-                optionsElements[userAnswers[currentQuestionIndex]].classList.add('selected');
-                selectedOption = userAnswers[currentQuestionIndex];
-                checkButton.disabled = true;
+            // 添加选项
+            question.options.forEach(option => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.dataset.value = option.charAt(0); // A, B, C, D
                 
-                // 如果已经检查过答案，显示结果
-                if (userAnswers[currentQuestionIndex] !== null) {
-                    showResult();
-                }
-            } else {
-                selectedOption = null;
-                checkButton.disabled = false;
-            }
-            
-            // 更新进度
-            updateProgress();
-        }
-
-        // 更新题目导航
-        function updateQuestionNavigation() {
-            const questionItems = document.querySelectorAll('.question-item');
-            questionItems.forEach((item, index) => {
-                item.classList.remove('current');
-                
-                if (index === currentQuestionIndex) {
-                    item.classList.add('current');
-                }
-                
-                if (userAnswers[index] !== null) {
-                    if (userAnswers[index] === questions[index].correctAnswer) {
-                        item.classList.add('answered');
-                    } else {
-                        item.classList.add('incorrect');
+                // 检查是否已经回答过此题
+                if (userAnswers[question.id]) {
+                    const userAnswer = userAnswers[question.id];
+                    if (userAnswer.includes(option.charAt(0))) {
+                        optionElement.classList.add('selected');
                     }
                 }
+                
+                optionElement.addEventListener('click', () => selectOption(optionElement));
+                optionsContainer.appendChild(optionElement);
             });
+            
+            // 重置解析显示
+            explanationDiv.classList.remove('show');
+            
+            // 更新按钮状态
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === questions.length - 1;
+            
+            // 如果已经回答过此题，显示解析
+            if (userAnswers[question.id]) {
+                showAnswer(question);
+            }
         }
 
-        // 更新进度
-        function updateProgress() {
-            const answeredCount = userAnswers.filter(answer => answer !== null).length;
-            const progressPercentage = (answeredCount / questions.length) * 100;
+        // 选择选项
+        function selectOption(optionElement) {
+            if (mode === 'exam' && userAnswers[questions[currentQuestionIndex].id]) {
+                return; // 考试模式下已回答的题目不能修改
+            }
             
-            progressTextElement.textContent = `${answeredCount}/${questions.length}`;
-            progressBarElement.style.width = `${progressPercentage}%`;
-            
-            answeredCountElement.textContent = answeredCount;
-            correctCountElement.textContent = correctAnswers;
-            
-            const accuracy = answeredCount > 0 ? (correctAnswers / answeredCount * 100).toFixed(1) : 0;
-            accuracyElement.textContent = `${accuracy}%`;
-        }
-
-        // 显示结果
-        function showResult() {
             const question = questions[currentQuestionIndex];
-            const isCorrect = selectedOption === question.correctAnswer;
+            const optionValue = optionElement.dataset.value;
             
-            resultElement.classList.add('show');
-            resultElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+            if (question.type === '多选题') {
+                // 多选逻辑
+                optionElement.classList.toggle('selected');
+            } else {
+                // 单选逻辑
+                const options = optionsContainer.querySelectorAll('.option');
+                options.forEach(opt => opt.classList.remove('selected'));
+                optionElement.classList.add('selected');
+            }
+        }
+
+        // 提交答案
+        function submitAnswer() {
+            const question = questions[currentQuestionIndex];
+            const selectedOptions = optionsContainer.querySelectorAll('.option.selected');
             
-            resultTextElement.textContent = isCorrect ? 
-                "恭喜！回答正确！" : 
-                "很遗憾，回答错误！";
+            if (selectedOptions.length === 0) {
+                alert('请至少选择一个选项！');
+                return;
+            }
             
-            explanationElement.textContent = question.explanation;
+            // 获取用户答案
+            const userAnswer = Array.from(selectedOptions)
+                .map(opt => opt.dataset.value)
+                .sort()
+                .join('');
             
-            // 高亮显示正确答案和用户答案
-            optionsElements.forEach((option, index) => {
-                if (index === question.correctAnswer) {
+            // 保存用户答案
+            userAnswers[question.id] = userAnswer;
+            
+            // 显示答案和解析
+            showAnswer(question);
+            
+            // 更新统计
+            updateStats();
+        }
+
+        // 显示答案
+        function showAnswer(question) {
+            const userAnswer = userAnswers[question.id];
+            const correctAnswer = question.answer;
+            
+            // 标记正确和错误选项
+            const options = optionsContainer.querySelectorAll('.option');
+            options.forEach(option => {
+                const optionValue = option.dataset.value;
+                
+                if (correctAnswer.includes(optionValue)) {
                     option.classList.add('correct');
-                } else if (index === selectedOption && !isCorrect) {
+                } else if (userAnswer.includes(optionValue)) {
                     option.classList.add('incorrect');
                 }
             });
+            
+            // 显示解析
+            explanationDiv.textContent = `解析：${question.explanation}`;
+            explanationDiv.classList.add('show');
+            
+            // 如果答案错误，添加到错题集
+            if (userAnswer !== correctAnswer && !wrongQuestions.includes(question.id)) {
+                wrongQuestions.push(question.id);
+            }
         }
 
-        // 事件监听器
-        optionsElements.forEach(option => {
-            option.addEventListener('click', () => {
-                if (userAnswers[currentQuestionIndex] !== null) return;
-                
-                // 移除之前的选择
-                optionsElements.forEach(opt => opt.classList.remove('selected'));
-                
-                // 添加新选择
-                option.classList.add('selected');
-                selectedOption = parseInt(option.dataset.index);
-                checkButton.disabled = false;
-            });
-        });
-
-        checkButton.addEventListener('click', () => {
-            if (selectedOption === null) return;
-            
-            userAnswers[currentQuestionIndex] = selectedOption;
-            
-            // 更新正确计数
-            if (selectedOption === questions[currentQuestionIndex].correctAnswer) {
-                correctAnswers++;
-            }
-            
-            showResult();
-            updateProgress();
-            updateQuestionNavigation();
-            checkButton.disabled = true;
-        });
-
-        prevButton.addEventListener('click', () => {
+        // 上一题
+        function goToPreviousQuestion() {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
-                loadQuestion();
+                loadQuestion(currentQuestionIndex);
             }
-        });
+        }
 
-        nextButton.addEventListener('click', () => {
+        // 下一题
+        function goToNextQuestion() {
             if (currentQuestionIndex < questions.length - 1) {
                 currentQuestionIndex++;
-                loadQuestion();
+                loadQuestion(currentQuestionIndex);
             }
-        });
+        }
 
-        // 初始化
-        initializeQuestionList();
-        loadQuestion();
+        // 切换模式
+        function switchMode(newMode) {
+            mode = newMode;
+            
+            // 更新按钮状态
+            practiceModeBtn.classList.remove('active');
+            examModeBtn.classList.remove('active');
+            reviewModeBtn.classList.remove('active');
+            
+            if (newMode === 'practice') {
+                practiceModeBtn.classList.add('active');
+                wrongQuestionsContainer.style.display = 'none';
+            currentQuestionIndex = 0;
+                loadQuestion(currentQuestionIndex);
+            } else if (newMode === 'exam') {
+                examModeBtn.classList.add('active');
+                wrongQuestionsContainer.style.display = 'none';
+                currentQuestionIndex = 0;
+                userAnswers = {};
+                loadQuestion(currentQuestionIndex);
+            } else if (newMode === 'review') {
+                reviewModeBtn.classList.add('active');
+                loadWrongQuestions();
+                wrongQuestionsContainer.style.display = 'block';
+            }
+        }
+
+        // 加载错题
+        function loadWrongQuestions() {
+            wrongQuestionsContainer.innerHTML = '<h3>错题集</h3>';
+            
+            if (wrongQuestions.length === 0) {
+                wrongQuestionsContainer.innerHTML += '<p>暂无错题</p>';
+                return;
+            }
+            
+            wrongQuestions.forEach(questionId => {
+                const question = questions.find(q => q.id === questionId);
+                if (question) {
+                    const wrongQuestionElement = document.createElement('div');
+                    wrongQuestionElement.className = 'wrong-question';
+                    wrongQuestionElement.innerHTML = `
+                        <div class="question-text">${question.id}.${question.text}</div>
+                        <div class="explanation">正确答案: ${question.answer} | 您的答案: ${userAnswers[question.id]}</div>
+                        <div class="explanation">解析：${question.explanation}</div>
+                    `;
+                    wrongQuestionsContainer.appendChild(wrongQuestionElement);
+                }
+            });
+        }
+
+        // 更新统计信息
+        function updateStats() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const correctCount = Object.keys(userAnswers).filter(id => {
+                const question = questions.find(q => q.id === parseInt(id));
+                return question && userAnswers[id] === question.answer;
+            }).length;
+            
+            answeredCountSpan.textContent = answeredCount;
+            
+            const correctRate = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+            correctRateSpan.textContent = `${correctRate}%`;
+            
+            const progress = (answeredCount / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
